@@ -1,0 +1,59 @@
+/> ls
+o- / ................................................................ [...]
+  o- backstores ..................................................... [...]
+  | o- block ......................................... [Storage Objects: 1]
+  | | o- iscsi_store ............ [/dev/vdb1 (3.0GiB) write-thru activated]
+  | o- fileio ........................................ [Storage Objects: 0]
+  | o- pscsi ......................................... [Storage Objects: 0]
+  | o- ramdisk ....................................... [Storage Objects: 0]
+  o- iscsi ................................................... [Targets: 1]
+  | o- iqn.2016-02.com.example:server0 .......................... [TPGs: 1]
+  |   o- tpg1 ...................................... [no-gen-acls, no-auth]
+  |     o- acls ................................................. [ACLs: 1]
+  |     | o- iqn.2016-02.com.example:desktop0 ............ [Mapped LUNs: 1]
+  |     |   o- mapped_lun0 .................. [lun0 block/iscsi_store (rw)]
+  |     o- luns ................................................. [LUNs: 1]
+  |     | o- lun0 ......................... [block/iscsi_store (/dev/vdb1)]
+  |     o- portals ........................................... [Portals: 2]
+  |       o- 0.0.0.3260:3260 ......................................... [OK]
+  |       o- 172.25.0.11:3260 ........................................ [OK]
+  o- loopback ................................................ [Targets: 0]
+删除错误的服务端口0.0.0.3260：3260
+/> cd /iscsi/iqn.2016-02.com.example:server0/tpg1/portals   #先进入
+/iscsi/iqn.20.../tpg1/portals> delete 0.0.0.3260 3260       #再删除
+Deleted network portal 0.0.0.3260:3260
+
+
+
+
+                                                          防火墙  删除
+[root@server0 ~]# firewall-cmd --permanent --remove-source=172.34.0.0/24 --zone=trusted 
+success
+
+
+[root@server0 ~]# firewall-cmd --list-all --zone=trusted 
+trusted (default, active)
+  interfaces: eth0 eth1 eth2 team0
+  sources: 
+  services: 
+  ports: 
+  masquerade: no
+  forward-ports: port=5423:proto=tcp:toport=80:toaddr=
+  icmp-blocks: 
+  rich rules:
+
+
+
+
+[root@server0 ~]# firewall-cmd --list-all
+trusted (default, active)
+  interfaces: eth0 eth1 eth2 team0
+  sources: 
+  services: 
+  ports: 
+  masquerade: no
+  forward-ports: port=5423:proto=tcp:toport=80:toaddr=
+  icmp-blocks: 
+  rich rules: 
+	
+
